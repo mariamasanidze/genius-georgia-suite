@@ -2,41 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* SocialGenius Design System - Premium SaaS Quality */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core Brand Colors - HSL Format */
+    --primary: 212 57% 42%; /* #3F6694 */
+    --primary-light: 203 95% 67%; /* #6BACFA */
+    --primary-foreground: 0 0% 100%;
+    
+    --georgian-accent: 0 73% 51%; /* #dc2626 Georgian flag red */
+    --georgian-accent-foreground: 0 0% 100%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Rich Background System - No white/beige */
+    --background: 225 25% 8%; /* Deep slate background */
+    --background-light: 220 20% 14%; /* Lighter background sections */
+    --background-card: 222 27% 11%; /* Card backgrounds */
+    --background-elevated: 218 23% 16%; /* Elevated surfaces */
+    
+    --foreground: 213 20% 94%; /* Near white text */
+    --foreground-muted: 215 16% 65%; /* Muted text */
+    --foreground-subtle: 216 12% 52%; /* Subtle text */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Card System */
+    --card: 222 27% 11%;
+    --card-foreground: 213 20% 94%;
+    --card-border: 217 19% 18%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Interactive Elements */
+    --secondary: 217 19% 18%;
+    --secondary-foreground: 213 20% 94%;
+    --secondary-hover: 217 19% 22%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 217 19% 15%;
+    --muted-foreground: 215 16% 65%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 203 95% 67%;
+    --accent-foreground: 222 27% 11%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 73% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --border: 217 19% 18%;
+    --input: 217 19% 15%;
+    --input-border: 217 19% 22%;
+    --ring: 203 95% 67%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Success & Warning Colors */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 45 93% 47%;
+    --warning-foreground: 222 27% 11%;
 
-    --radius: 0.5rem;
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-light)) 50%, hsl(var(--accent)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--background-elevated)) 100%);
+    --gradient-button: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-light)) 100%);
+    --gradient-surface: linear-gradient(180deg, hsl(var(--background-light)) 0%, hsl(var(--background)) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-glow: 0 0 40px hsla(var(--primary-light), 0.3);
+    --shadow-elegant: 0 25px 50px -12px hsla(var(--primary), 0.4);
+
+    /* Spacing & Layout */
+    --radius: 0.75rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+
+    /* Animations */
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +144,186 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-jakarta;
+  }
+}
+
+@layer components {
+  /* Button Variants */
+  .btn-hero {
+    @apply bg-gradient-to-r from-primary to-primary-light text-primary-foreground 
+           px-8 py-4 rounded-xl font-semibold text-lg
+           shadow-lg hover:shadow-xl transition-all duration-300
+           hover:scale-105 hover:shadow-glow;
+  }
+
+  .btn-georgian {
+    @apply bg-georgian-accent text-georgian-accent-foreground 
+           px-6 py-3 rounded-lg font-semibold
+           shadow-md hover:shadow-lg transition-all duration-300
+           hover:scale-105;
+  }
+
+  .btn-outline-hero {
+    @apply border-2 border-primary-light text-primary-light bg-transparent
+           px-6 py-3 rounded-lg font-semibold
+           hover:bg-primary-light hover:text-accent-foreground
+           transition-all duration-300;
+  }
+
+  /* Card Variants */
+  .card-gradient {
+    @apply bg-gradient-to-br from-card to-background-elevated
+           border border-card-border rounded-xl p-6
+           shadow-lg hover:shadow-xl transition-all duration-300
+           hover:scale-[1.02];
+  }
+
+  .card-feature {
+    @apply bg-gradient-to-br from-background-card to-background-light
+           border border-border rounded-xl p-8
+           shadow-md hover:shadow-lg transition-all duration-300
+           hover:border-primary-light/20;
+  }
+
+  .card-testimonial {
+    @apply bg-gradient-to-br from-card to-background-elevated
+           border border-card-border rounded-2xl p-6
+           shadow-lg hover:shadow-xl transition-all duration-500
+           hover:translate-y-[-4px];
+  }
+
+  /* Background Patterns */
+  .bg-hero {
+    background: var(--gradient-hero);
+    background-attachment: fixed;
+  }
+
+  .bg-surface {
+    background: var(--gradient-surface);
+  }
+
+  .bg-mesh {
+    background-image: 
+      radial-gradient(at 40% 20%, hsla(var(--primary), 0.3) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsla(var(--primary-light), 0.2) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsla(var(--accent), 0.1) 0px, transparent 50%);
+  }
+
+  /* Text Gradients */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-light to-accent bg-clip-text text-transparent;
+  }
+
+  .text-gradient-hero {
+    @apply bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent;
+  }
+
+  /* Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  /* Scroll Animations */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(2rem);
+    transition: var(--transition-slow);
+  }
+
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Interactive Elements */
+  .interactive-card {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-xl;
+  }
+
+  .glassmorphism {
+    @apply bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl;
+  }
+
+  /* Form Elements */
+  .input-elegant {
+    @apply bg-input border border-input-border rounded-lg px-4 py-3
+           text-foreground placeholder:text-muted-foreground
+           focus:border-primary-light focus:ring-2 focus:ring-primary-light/20
+           transition-all duration-200;
+  }
+
+  /* Dashboard Specific */
+  .dashboard-card {
+    @apply bg-card border border-card-border rounded-xl p-6
+           shadow-sm hover:shadow-md transition-all duration-200;
+  }
+
+  .stat-card {
+    @apply bg-gradient-to-br from-card to-background-elevated
+           border border-card-border rounded-xl p-6
+           shadow-md hover:shadow-lg transition-all duration-300
+           hover:border-primary-light/30;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 20px hsla(var(--primary-light), 0.4); }
+  to { box-shadow: 0 0 40px hsla(var(--primary-light), 0.8); }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary-light));
 }
