@@ -11,7 +11,10 @@ const ContentGenerator: React.FC = () => {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['facebook']);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('georgian');
+  const [contentType, setContentType] = useState<string>('text-image');
   const [topic, setTopic] = useState('');
+  const [textStyle, setTextStyle] = useState<string>('friendly');
   const [generatedContent, setGeneratedContent] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -20,6 +23,24 @@ const ContentGenerator: React.FC = () => {
     { id: 'facebook', name: 'Facebook', icon: Facebook, color: 'text-blue-600' },
     { id: 'instagram', name: 'Instagram', icon: Instagram, color: 'text-pink-600' },
     { id: 'twitter', name: 'Twitter', icon: Twitter, color: 'text-blue-400' }
+  ];
+
+  const languages = [
+    { id: 'georgian', name: language === 'ka' ? 'ქართული' : 'Georgian' },
+    { id: 'english', name: language === 'ka' ? 'ინგლისური' : 'English' }
+  ];
+
+  const contentTypes = [
+    { id: 'text-only', name: language === 'ka' ? 'მხოლოდ ტექსტი' : 'Text Only' },
+    { id: 'image-only', name: language === 'ka' ? 'მხოლოდ სურათი' : 'Image Only' },
+    { id: 'text-image', name: language === 'ka' ? 'ტექსტი + სურათი' : 'Text + Image' }
+  ];
+
+  const textStyles = [
+    { id: 'friendly', name: language === 'ka' ? 'მეგობრული' : 'Friendly' },
+    { id: 'professional', name: language === 'ka' ? 'პროფესიონალური' : 'Professional' },
+    { id: 'everyday', name: language === 'ka' ? 'ყოველდღიური' : 'Everyday' },
+    { id: 'excited', name: language === 'ka' ? 'აღფრთოვანებული' : 'Excited' }
   ];
 
   const handlePlatformToggle = (platformId: string) => {
@@ -41,9 +62,17 @@ const ContentGenerator: React.FC = () => {
       // Mock AI generation
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const mockContent = language === 'ka' 
-        ? `🌟 ${topic} - ახალი შესაძლებლობა ჩვენი ბიზნესისთვის!\n\nჩვენ ვამაყოვართ რომ შეგვიძლია მოგაწოდოთ საუკეთესო სერვისი. დღეს განსაკუთრებით გვინდა გაგიზიაროთ ${topic} შესახებ.\n\n#ქართული #ბიზნესი #${topic.replace(/\s/g, '')}`
-        : `🌟 Exciting news about ${topic}!\n\nWe're proud to share something special with our community. Today we want to tell you more about ${topic} and how it can benefit you.\n\n#Business #Georgia #${topic.replace(/\s/g, '')}`;
+      const isGeorgian = selectedLanguage === 'georgian';
+      const stylePrefix = {
+        friendly: isGeorgian ? '😊' : '😊',
+        professional: isGeorgian ? '💼' : '💼',
+        everyday: isGeorgian ? '🌟' : '🌟',
+        excited: isGeorgian ? '🎉' : '🎉'
+      }[textStyle];
+
+      const mockContent = isGeorgian 
+        ? `${stylePrefix} ${topic} - ახალი შესაძლებლობა ჩვენი ბიზნესისთვის!\n\nჩვენ ვამაყოვართ რომ შეგვიძლია მოგაწოდოთ საუკეთესო სერვისი. დღეს განსაკუთრებით გვინდა გაგიზიაროთ ${topic} შესახებ.\n\n#ქართული #ბიზნესი #${topic.replace(/\s/g, '')}`
+        : `${stylePrefix} Exciting news about ${topic}!\n\nWe're proud to share something special with our community. Today we want to tell you more about ${topic} and how it can benefit you.\n\n#Business #Georgia #${topic.replace(/\s/g, '')}`;
       
       setGeneratedContent(mockContent);
       toast.success(language === 'ka' ? 'კონტენტი წარმატებით შეიქმნა!' : 'Content generated successfully!');
@@ -76,6 +105,50 @@ const ContentGenerator: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Input Section */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Language Selection */}
+          <div className="card-gradient">
+            <h2 className="text-lg font-semibold text-foreground mb-4">
+              {language === 'ka' ? 'ენის არჩევა' : 'Language Selection'}
+            </h2>
+            <div className="grid grid-cols-2 gap-3">
+              {languages.map((lang) => (
+                <button
+                  key={lang.id}
+                  onClick={() => setSelectedLanguage(lang.id)}
+                  className={`p-3 rounded-lg border-2 transition-all duration-200 ${
+                    selectedLanguage === lang.id
+                      ? 'border-primary-light bg-primary-light/10' 
+                      : 'border-border hover:border-primary-light/50'
+                  }`}
+                >
+                  <span className="text-sm font-medium text-foreground">{lang.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Content Type Selection */}
+          <div className="card-gradient">
+            <h2 className="text-lg font-semibold text-foreground mb-4">
+              {language === 'ka' ? 'კონტენტის ტიპი' : 'Content Type'}
+            </h2>
+            <div className="grid grid-cols-3 gap-3">
+              {contentTypes.map((type) => (
+                <button
+                  key={type.id}
+                  onClick={() => setContentType(type.id)}
+                  className={`p-3 rounded-lg border-2 transition-all duration-200 ${
+                    contentType === type.id
+                      ? 'border-primary-light bg-primary-light/10' 
+                      : 'border-border hover:border-primary-light/50'
+                  }`}
+                >
+                  <span className="text-xs font-medium text-foreground">{type.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Platform Selection */}
           <div className="card-gradient">
             <h2 className="text-lg font-semibold text-foreground mb-4">
@@ -106,7 +179,7 @@ const ContentGenerator: React.FC = () => {
             </div>
           </div>
 
-          {/* Content Input */}
+          {/* Topic Input */}
           <div className="card-gradient">
             <h2 className="text-lg font-semibold text-foreground mb-4">
               {language === 'ka' ? 'თემა ან იდეა' : 'Topic or Idea'}
@@ -121,6 +194,28 @@ const ContentGenerator: React.FC = () => {
               className="input-elegant resize-none"
               rows={4}
             />
+          </div>
+
+          {/* Text Style Selection */}
+          <div className="card-gradient">
+            <h2 className="text-lg font-semibold text-foreground mb-4">
+              {language === 'ka' ? 'ტექსტის სტილი' : 'Text Style'}
+            </h2>
+            <div className="grid grid-cols-2 gap-3">
+              {textStyles.map((style) => (
+                <button
+                  key={style.id}
+                  onClick={() => setTextStyle(style.id)}
+                  className={`p-3 rounded-lg border-2 transition-all duration-200 ${
+                    textStyle === style.id
+                      ? 'border-primary-light bg-primary-light/10' 
+                      : 'border-border hover:border-primary-light/50'
+                  }`}
+                >
+                  <span className="text-sm font-medium text-foreground">{style.name}</span>
+                </button>
+              ))}
+            </div>
             
             <Button 
               onClick={generateContent}
@@ -169,11 +264,13 @@ const ContentGenerator: React.FC = () => {
                     {language === 'ka' ? 'ავტომატურად გენერირებული სურათი' : 'Auto-generated Image'}
                   </span>
                 </div>
-                <div className="w-full h-32 bg-gradient-primary rounded-lg flex items-center justify-center">
-                  <span className="text-white text-xs font-medium text-center px-2">
-                    {language === 'ka' ? 'AI სურათი თემაზე: ' : 'AI Image for: '}{topic}
-                  </span>
-                </div>
+                {(contentType === 'image-only' || contentType === 'text-image') && (
+                  <div className="w-full h-32 bg-gradient-primary rounded-lg flex items-center justify-center">
+                    <span className="text-white text-xs font-medium text-center px-2">
+                      {language === 'ka' ? 'AI სურათი თემაზე: ' : 'AI Image for: '}{topic}
+                    </span>
+                  </div>
+                 )}
               </div>
 
               <div className="space-y-4">

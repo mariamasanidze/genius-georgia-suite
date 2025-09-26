@@ -52,10 +52,10 @@ const LoginPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-jakarta font-bold text-white mb-2">
+        <h1 className="text-2xl font-jakarta font-bold text-foreground mb-2">
           {language === 'ka' ? 'შესვლა' : 'Welcome Back'}
         </h1>
-        <p className="text-white/80">
+        <p className="text-foreground-muted">
           {language === 'ka' 
             ? 'შედით თქვენს ანგარიშში' 
             : 'Sign in to your account'
@@ -65,21 +65,21 @@ const LoginPage: React.FC = () => {
 
       {/* Demo Credentials */}
       <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 text-center">
-        <p className="text-xs text-white/90 mb-1">
+        <p className="text-xs text-foreground mb-1">
           {language === 'ka' ? 'დემო მონაცემები:' : 'Demo credentials:'}
         </p>
-        <p className="text-xs text-white/70">
+        <p className="text-xs text-foreground-muted">
           demo@socialgenius.ge / demo123
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <Label htmlFor="email" className="text-white/90">
+          <Label htmlFor="email" className="text-foreground">
             {language === 'ka' ? 'ელ. ფოსტა' : 'Email'}
           </Label>
           <div className="relative mt-1">
-            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-foreground-subtle" />
             <Input
               id="email"
               name="email"
@@ -87,18 +87,18 @@ const LoginPage: React.FC = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className="input-elegant pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/50"
+              className="input-elegant pl-10"
               placeholder={language === 'ka' ? 'შეიყვანეთ ელ. ფოსტა' : 'Enter your email'}
             />
           </div>
         </div>
 
         <div>
-          <Label htmlFor="password" className="text-white/90">
+          <Label htmlFor="password" className="text-foreground">
             {language === 'ka' ? 'პაროლი' : 'Password'}
           </Label>
           <div className="relative mt-1">
-            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-foreground-subtle" />
             <Input
               id="password"
               name="password"
@@ -106,13 +106,13 @@ const LoginPage: React.FC = () => {
               required
               value={formData.password}
               onChange={handleChange}
-              className="input-elegant pl-10 pr-10 bg-white/5 border-white/20 text-white placeholder:text-white/50"
+              className="input-elegant pl-10 pr-10"
               placeholder={language === 'ka' ? 'შეიყვანეთ პაროლი' : 'Enter your password'}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white/80"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground-subtle hover:text-foreground"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -125,9 +125,9 @@ const LoginPage: React.FC = () => {
               id="remember-me"
               name="remember-me"
               type="checkbox"
-              className="h-4 w-4 text-primary-light focus:ring-primary-light border-white/30 rounded bg-white/5"
+              className="h-4 w-4 text-primary-light focus:ring-primary-light border-border rounded"
             />
-            <Label htmlFor="remember-me" className="ml-2 text-sm text-white/80">
+            <Label htmlFor="remember-me" className="ml-2 text-sm text-foreground-muted">
               {language === 'ka' ? 'დამახსოვრება' : 'Remember me'}
             </Label>
           </div>
@@ -153,7 +153,7 @@ const LoginPage: React.FC = () => {
       </form>
 
       <div className="text-center">
-        <p className="text-white/80">
+        <p className="text-foreground-muted">
           {language === 'ka' ? 'არ გაქვთ ანგარიში?' : "Don't have an account?"}{' '}
           <Link
             to="/register"

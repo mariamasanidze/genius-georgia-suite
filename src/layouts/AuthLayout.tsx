@@ -12,18 +12,18 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-hero flex items-center justify-center px-4 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 sm:px-6 lg:px-8 relative">
       {/* Background mesh */}
-      <div className="absolute inset-0 bg-mesh opacity-50" />
+      <div className="absolute inset-0 bg-gradient-subtle opacity-30" />
       
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 p-6">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/30">
-              <span className="text-white font-bold text-sm">SG</span>
+            <div className="w-8 h-8 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-primary/30">
+              <span className="text-foreground font-bold text-sm">SG</span>
             </div>
-            <span className="text-xl font-jakarta font-bold text-white">
+            <span className="text-xl font-jakarta font-bold text-foreground">
               SocialGenius
             </span>
           </Link>
@@ -32,7 +32,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
             variant="ghost"
             size="sm"
             onClick={() => setLanguage(language === 'ka' ? 'en' : 'ka')}
-            className="flex items-center space-x-1 text-white hover:bg-white/10"
+            className="flex items-center space-x-1 text-foreground hover:bg-foreground/10"
           >
             <Globe className="w-4 h-4" />
             <span className="text-xs font-medium">
@@ -44,7 +44,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
 
       {/* Main Content */}
       <div className="relative w-full max-w-md">
-        <div className="glassmorphism p-8 shadow-elegant">
+        <div className="card-gradient p-8 shadow-elegant">
           {children}
         </div>
         
@@ -52,7 +52,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
         <div className="text-center mt-6">
           <Link 
             to="/" 
-            className="text-white/80 hover:text-white text-sm transition-colors"
+            className="text-foreground-muted hover:text-foreground text-sm transition-colors"
           >
             ← {language === 'ka' ? 'უკან მთავარ გვერდზე' : 'Back to Home'}
           </Link>
