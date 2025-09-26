@@ -89,10 +89,10 @@ const RegisterPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-jakarta font-bold text-white mb-2">
+        <h1 className="text-2xl font-jakarta font-bold text-foreground mb-2">
           {language === 'ka' ? 'რეგისტრაცია' : 'Create Account'}
         </h1>
-        <p className="text-white/80">
+        <p className="text-foreground-muted">
           {language === 'ka' 
             ? 'შექმენით თქვენი ანგარიში' 
             : 'Get started with SocialGenius'
@@ -103,11 +103,11 @@ const RegisterPage: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="name" className="text-white/90">
+            <Label htmlFor="name" className="text-foreground">
               {language === 'ka' ? 'სახელი' : 'Full Name'}
             </Label>
             <div className="relative mt-1">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-foreground-subtle" />
               <Input
                 id="name"
                 name="name"
@@ -115,18 +115,18 @@ const RegisterPage: React.FC = () => {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="input-elegant pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                className="input-elegant pl-10"
                 placeholder={language === 'ka' ? 'შეიყვანეთ სახელი' : 'Enter your name'}
               />
             </div>
           </div>
 
           <div>
-            <Label htmlFor="email" className="text-white/90">
+            <Label htmlFor="email" className="text-foreground">
               {language === 'ka' ? 'ელ. ფოსტა' : 'Email'}
             </Label>
             <div className="relative mt-1">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-foreground-subtle" />
               <Input
                 id="email"
                 name="email"
@@ -134,7 +134,7 @@ const RegisterPage: React.FC = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="input-elegant pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                className="input-elegant pl-10"
                 placeholder={language === 'ka' ? 'შეიყვანეთ ელ. ფოსტა' : 'Enter your email'}
               />
             </div>
@@ -142,11 +142,11 @@ const RegisterPage: React.FC = () => {
         </div>
 
         <div>
-          <Label htmlFor="businessName" className="text-white/90">
+          <Label htmlFor="businessName" className="text-foreground">
             {language === 'ka' ? 'ბიზნესის სახელი' : 'Business Name'}
           </Label>
           <div className="relative mt-1">
-            <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+            <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-foreground-subtle" />
             <Input
               id="businessName"
               name="businessName"
@@ -154,18 +154,18 @@ const RegisterPage: React.FC = () => {
               required
               value={formData.businessName}
               onChange={handleChange}
-              className="input-elegant pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/50"
+              className="input-elegant pl-10"
               placeholder={language === 'ka' ? 'შეიყვანეთ ბიზნესის სახელი' : 'Enter your business name'}
             />
           </div>
         </div>
 
         <div>
-          <Label className="text-white/90">
+          <Label className="text-foreground">
             {language === 'ka' ? 'ბიზნესის ტიპი' : 'Business Type'}
           </Label>
           <Select onValueChange={handleBusinessTypeChange} required>
-            <SelectTrigger className="mt-1 bg-white/5 border-white/20 text-white">
+            <SelectTrigger className="mt-1">
               <SelectValue placeholder={language === 'ka' ? 'აირჩიეთ ბიზნესის ტიპი' : 'Select business type'} />
             </SelectTrigger>
             <SelectContent>
@@ -180,11 +180,11 @@ const RegisterPage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="password" className="text-white/90">
+            <Label htmlFor="password" className="text-foreground">
               {language === 'ka' ? 'პაროლი' : 'Password'}
             </Label>
             <div className="relative mt-1">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-foreground-subtle" />
               <Input
                 id="password"
                 name="password"
@@ -192,13 +192,13 @@ const RegisterPage: React.FC = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="input-elegant pl-10 pr-10 bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                className="input-elegant pl-10 pr-10"
                 placeholder={language === 'ka' ? 'შეიყვანეთ პაროლი' : 'Enter password'}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white/80"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground-subtle hover:text-foreground"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -206,11 +206,11 @@ const RegisterPage: React.FC = () => {
           </div>
 
           <div>
-            <Label htmlFor="confirmPassword" className="text-white/90">
+            <Label htmlFor="confirmPassword" className="text-foreground">
               {language === 'ka' ? 'გაიმეორეთ პაროლი' : 'Confirm Password'}
             </Label>
             <div className="relative mt-1">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-foreground-subtle" />
               <Input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -218,13 +218,13 @@ const RegisterPage: React.FC = () => {
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="input-elegant pl-10 pr-10 bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                className="input-elegant pl-10 pr-10"
                 placeholder={language === 'ka' ? 'გაიმეორეთ პაროლი' : 'Confirm password'}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white/80"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground-subtle hover:text-foreground"
               >
                 {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -238,9 +238,9 @@ const RegisterPage: React.FC = () => {
             name="terms"
             type="checkbox"
             required
-            className="h-4 w-4 text-primary-light focus:ring-primary-light border-white/30 rounded bg-white/5"
+            className="h-4 w-4 text-primary-light focus:ring-primary-light border-border rounded"
           />
-          <Label htmlFor="terms" className="ml-2 text-sm text-white/80">
+          <Label htmlFor="terms" className="ml-2 text-sm text-foreground-muted">
             {language === 'ka' 
               ? 'ვეთანხმები ' 
               : 'I agree to the '
@@ -264,7 +264,7 @@ const RegisterPage: React.FC = () => {
       </form>
 
       <div className="text-center">
-        <p className="text-white/80">
+        <p className="text-foreground-muted">
           {language === 'ka' ? 'უკვე გაქვთ ანგარიში?' : 'Already have an account?'}{' '}
           <Link
             to="/login"

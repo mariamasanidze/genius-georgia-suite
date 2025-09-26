@@ -132,7 +132,7 @@ const ContentCalendar: React.FC = () => {
               return (
                 <div
                   key={index}
-                  className={`min-h-[100px] p-2 rounded-lg border transition-colors ${
+                  className={`min-h-[80px] p-2 rounded-lg border transition-colors ${
                     day 
                       ? 'border-border hover:border-primary-light bg-background cursor-pointer' 
                       : 'border-transparent'
