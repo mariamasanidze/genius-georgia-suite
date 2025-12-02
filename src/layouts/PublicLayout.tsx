@@ -32,10 +32,10 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+              {/* <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">SG</span>
-              </div>
-              <span className="text-xl font-jakarta font-bold text-gradient-hero">
+              </div> */}
+              <span className="text-2xl font-jakarta font-bold text-gradient-hero">
                 SocialGenius
               </span>
             </Link>
@@ -162,10 +162,10 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
             {/* Company Info */}
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+                {/* <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">SG</span>
-                </div>
-                <span className="text-xl font-jakarta font-bold text-gradient-hero">
+                </div> */}
+                <span className="text-2xl font-jakarta font-bold text-gradient-hero">
                   SocialGenius
                 </span>
               </div>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { Globe } from 'lucide-react';
+import { Globe, Menu, X } from 'lucide-react';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -10,54 +10,83 @@ interface AuthLayoutProps {
 
 const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   const { language, setLanguage } = useLanguage();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const arrayChildren = React.Children.toArray(children);
+
+ 
+  const title = arrayChildren.find(
+    (c: any) => c.type === "h1"
+  );
+
+
+  const content = arrayChildren.filter(
+    (c: any) => c !== title
+  );
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4 sm:px-6 lg:px-8 relative">
-      {/* Background mesh */}
-      <div className="absolute inset-0 bg-gradient-subtle opacity-30" />
-      
-      {/* Header */}
-      <div className="absolute top-0 left-0 right-0 p-6">
-        <div className="flex items-center justify-between max-w-7xl mx-auto">
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-primary/30">
-              <span className="text-foreground font-bold text-sm">SG</span>
-            </div>
-            <span className="text-xl font-jakarta font-bold text-foreground">
+    <div className="min-h-screen bg-hero relative">
+
+      {/* NAV */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-border">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="h-16 flex items-center justify-between">
+
+            <Link to="/" className="text-2xl font-jakarta font-bold text-gradient-hero">
               SocialGenius
-            </span>
-          </Link>
+            </Link>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setLanguage(language === 'ka' ? 'en' : 'ka')}
-            className="flex items-center space-x-1 text-foreground hover:bg-foreground/10"
-          >
-            <Globe className="w-4 h-4" />
-            <span className="text-xs font-medium">
-              {language === 'ka' ? 'ქარ' : 'ENG'}
-            </span>
-          </Button>
-        </div>
-      </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setLanguage(language === 'ka' ? 'en' : 'ka')}
+            >
+              <Globe className="w-4 h-4" />
+              <span className="ml-1 text-xs">{language === 'ka' ? 'ქარ' : 'ENG'}</span>
+            </Button>
 
-      {/* Main Content */}
-      <div className="relative w-full max-w-md">
-        <div className="card-gradient p-8 shadow-elegant">
-          {children}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X /> : <Menu />}
+            </Button>
+
+          </div>
         </div>
-        
-        {/* Back to Home */}
-        <div className="text-center mt-6">
-          <Link 
+      </header>
+
+      {/* PAGE */}
+      <main className="pt-24 px-4 flex justify-center relative z-10">
+
+        <div className="w-full max-w-md">
+
+          {/* Back + Title */}
+          <div className="flex items-center gap-3 mb-4">
+  
+         <Link 
             to="/" 
-            className="text-foreground-muted hover:text-foreground text-sm transition-colors"
-          >
-            ← {language === 'ka' ? 'უკან მთავარ გვერდზე' : 'Back to Home'}
+               className="px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20 flex items-center gap-2"
+            >
+              ← Back
           </Link>
+
+
+            <div className="flex-1 text-center text-xl font-bold text-foreground">
+              {title}
+            </div>
+          </div>
+
+          {/* Card */}
+          <div className="card-gradient p-8 shadow-elegant">
+            {content}
+          </div>
+
         </div>
-      </div>
+
+      </main>
     </div>
   );
 };

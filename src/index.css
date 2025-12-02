@@ -7,11 +7,10 @@
 
 @layer base {
   :root {
-    /* Core Brand Colors - HSL Format */
-    --primary: 212 57% 42%; /* #3F6694 */
-    --primary-light: 203 95% 67%; /* #6BACFA */
-    --primary-foreground: 0 0% 100%;
-    
+    --primary: 212 57% 30%;       /* darker blue */
+    --primary-light: 212 57% 45%; /* mid blue */
+    --accent: 215 70% 50%; 
+ 
     --georgian-accent: 0 73% 51%; /* #dc2626 Georgian flag red */
     --georgian-accent-foreground: 0 0% 100%;
 
@@ -169,12 +168,20 @@
            hover:scale-105;
   }
 
-  .btn-outline-hero {
-    @apply border-2 border-primary-light text-primary-light bg-transparent
-           px-6 py-3 rounded-lg font-semibold
-           hover:bg-primary-light hover:text-accent-foreground
-           transition-all duration-300;
-  }
+.btn-outline-hero {
+  background-color: black !important;                      
+  color: hsl(var(--primary-light)) !important;            
+  border: 2px solid hsl(var(--primary-light)) !important;  
+  transition: transform .2s ease, box-shadow .2s ease !important;
+}
+
+.btn-outline-hero:hover {
+  background-color: black !important;                    
+  color: hsl(var(--primary-light)) !important;           
+  border-color: hsl(var(--primary-light)) !important;      
+  transform: scale(1.05) !important;                      
+  box-shadow: 0 0 10px hsl(var(--primary-light) / 0.3) !important;
+}
 
   /* Card Variants */
   .card-gradient {
@@ -326,4 +333,70 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--primary-light));
+}
+
+
+/* added this so input texts dont go white */
+
+/* Force dark background even during autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px hsl(var(--input)) inset !important;
+  box-shadow: 0 0 0 1000px hsl(var(--input)) inset !important;
+  -webkit-text-fill-color: hsl(var(--foreground)) !important;
+  caret-color: hsl(var(--foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+
+
+
+/* Make input borders clearly visible */
+.input-elegant {
+  background-color: hsl(var(--input)) !important;
+  border: 1.8px solid hsl(217 19% 35%) !important; /* <-- much lighter */
+  border-radius: 0.75rem !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.input-elegant:focus {
+  border-color: hsl(var(--primary-light)) !important;
+  box-shadow: 0 0 0 2px hsl(var(--primary-light) / 0.25) !important;
+  outline: none !important;
+}
+
+/* FIX SHADCN SELECT DROPDOWN BACKGROUND GLOBALLY */
+
+/* Matches Radix portal container */
+div[data-radix-popper-content-wrapper] {
+  background-color: hsl(var(--background-card)) !important;
+  border-radius: 8px !important;
+  border: 1px solid hsl(var(--border)) !important;
+  overflow: hidden !important;
+}
+
+/* Matches SelectContent root */
+div[data-radix-select-content] {
+  background-color: hsl(var(--background-card)) !important;
+  border-radius: 8px !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: rgba(0,0,0,0.35) 0px 10px 30px !important;
+  overflow: hidden !important;
+}
+
+/* Matches each item */
+div[data-radix-select-item] {
+  background-color: hsl(var(--background-card)) !important;
+  padding: 8px 12px !important;
+}
+
+/* Hover effect */
+div[data-radix-select-item][data-highlighted] {
+  background-color: hsl(var(--primary-light) / 0.25) !important;
+}
+
+/* Selected item */
+div[data-radix-select-item][data-state="checked"] {
+  background-color: hsl(var(--primary-light) / 0.35) !important;
 }

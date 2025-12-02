@@ -78,7 +78,7 @@ const LandingPage: React.FC = () => {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-slide-up">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-jakarta font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-jakarta font-bold text-white mb-6 leading-tight">
               {t('hero.title')}
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
@@ -92,13 +92,19 @@ const LandingPage: React.FC = () => {
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <Button 
-                variant="outline" 
-                className="btn-outline-hero text-lg px-8 py-4"
-              >
-                <Play className="mr-2 w-5 h-5" />
-                {t('hero.cta.secondary')}
-              </Button>
+
+          <Button
+  variant="outline"
+  className="bg-[#0D1528]/70 border-white/10 text-white hover:bg-[#0D1528]/70 hover:border-white/10 hover:text-white active:bg-[#0D1528]/70 active:border-white/10 focus:bg-[#0D1528]/70 focus:border-white/10 transition-transform hover:scale-[1.02] active:scale-[0.98] text-lg px-8 py-4 rounded-xl backdrop-blur-sm"
+>
+  <Play className="mr-2 w-5 h-5" />
+  {t('hero.cta.secondary')}
+</Button>
+
+
+
+
+
             </div>
 
             {/* Social Proof */}
@@ -151,7 +157,7 @@ const LandingPage: React.FC = () => {
       <section className="py-20 bg-surface">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-jakarta font-bold text-gradient-hero mb-4">
+            <h2 className="text-4xl leading-tight font-jakarta font-bold text-gradient-hero mb-4">
               {t('features.title')}
             </h2>
             <p className="text-xl text-foreground-muted">
@@ -184,7 +190,7 @@ const LandingPage: React.FC = () => {
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-jakarta font-bold text-gradient-hero mb-4">
+            <h2 className="text-3xl leading-tight font-jakarta font-bold text-gradient-hero mb-4">
               {language === 'ka' ? 'რას ამბობენ ჩვენი კლიენტები' : 'What Our Clients Say'}
             </h2>
           </div>
@@ -201,7 +207,7 @@ const LandingPage: React.FC = () => {
                   "{testimonial.text}"
                 </p>
                 <div>
-                  <div className="font-semibold text-foreground">
+                  <div className="font-semibold  text-foreground">
                     {testimonial.name}
                   </div>
                   <div className="text-sm text-foreground-subtle">

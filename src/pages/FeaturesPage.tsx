@@ -154,15 +154,10 @@ const FeaturesPage: React.FC = () => {
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-jakarta font-bold text-gradient-hero mb-4">
-              {language === 'ka' ? 'რიცხვებში' : 'By the Numbers'}
+            <h2 className="text-3xl leading-tight font-jakarta font-bold text-gradient-hero mb-4">
+              {language === 'ka' ? 'ჩვენი პლატფორმის შედეგები' : 'Results from our platform'}
             </h2>
-            <p className="text-xl text-foreground-muted">
-              {language === 'ka' 
-                ? 'ჩვენი პლატფორმის შედეგები'
-                : 'Results from our platform'
-              }
-            </p>
+            
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -211,7 +206,7 @@ const FeaturesPage: React.FC = () => {
       <section className="py-20 bg-surface">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-jakarta font-bold text-gradient-hero mb-4">
+            <h2 className="text-3xl leading-tight font-jakarta font-bold text-gradient-hero mb-4">
               {language === 'ka' ? 'ტექნიკური უპირატესობები' : 'Technical Advantages'}
             </h2>
           </div>

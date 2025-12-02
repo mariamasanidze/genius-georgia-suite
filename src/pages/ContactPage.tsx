@@ -193,7 +193,7 @@ const ContactPage: React.FC = () => {
             {/* Contact Form */}
             <div>
               <div className="mb-8">
-                <h2 className="text-3xl font-jakarta font-bold text-gradient-hero mb-4">
+                <h2 className="text-3xl leading-tight font-jakarta font-bold text-gradient-hero mb-4">
                   {language === 'ka' ? 'გაგზავნეთ შეტყობინება' : 'Send us a Message'}
                 </h2>
                 <p className="text-foreground-muted">
@@ -324,7 +324,7 @@ const ContactPage: React.FC = () => {
             {/* FAQ */}
             <div>
               <div className="mb-8">
-                <h2 className="text-3xl font-jakarta font-bold text-gradient-hero mb-4">
+                <h2 className="text-3xl leading-tight font-jakarta font-bold text-gradient-hero mb-4">
                   {language === 'ka' ? 'ხშირად დასმული კითხვები' : 'Frequently Asked Questions'}
                 </h2>
                 <p className="text-foreground-muted">
