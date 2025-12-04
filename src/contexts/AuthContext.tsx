@@ -1,259 +1,353 @@
-// import React, { createContext, useContext, useState, useEffect } from 'react';
-
-// interface User {
-//   id: string;
-//   email: string;
-//   name: string;
-//   businessName: string;
-//   businessType: string;
-//   plan: 'starter' | 'professional' | 'enterprise';
+// import React, { createContext, useContext, useState, useEffect } from "react";
+// import api from "@/lib/api";
+//
+// interface LoginPayload {
+//     email: string;
+//     password: string;
 // }
-
+//
+// interface RegisterPayload {
+//     firstName: string;
+//     lastName: string;
+//     email: string;
+//     businessName: string;
+//     businessId: number;
+//     password: string;
+//     confirmPassword: string;
+// }
+//
+// export interface BackendUser {
+//     id: number;
+//     firstName: string;
+//     lastName: string;
+//     email: string;
+//     businessId: number;
+//     businessName: string;
+// }
+//
+// interface SessionData {
+//     accessToken: string;
+//     refreshToken: string;
+// }
+//
 // interface AuthContextType {
-//   user: User | null;
-//   isAuthenticated: boolean;
-//   isLoading: boolean;
-//   login: (email: string, password: string) => Promise<void>;
-//   register: (userData: Partial<User> & { email: string; password: string }) => Promise<void>;
-//   logout: () => void;
+//     user: BackendUser | null;
+//     isAuthenticated: boolean;
+//     isLoading: boolean;
+//     login: (email: string, password: string) => Promise<void>;
+//     register: (data: RegisterPayload) => Promise<void>;
+//     logout: () => void;
 // }
-
+//
 // const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-// // Mock user data for development
-// const mockUser: User = {
-//   id: '1',
-//   email: 'demo@socialgenius.ge',
-//   name: 'გიორგი ქართველი',
-//   businessName: 'კაფე ვარძია',
-//   businessType: 'restaurant',
-//   plan: 'professional'
+//
+// export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+//                                                                           children,
+//                                                                       }) => {
+//     const [user, setUser] = useState<BackendUser | null>(null);
+//     const [session, setSession] = useState<SessionData | null>(null);
+//     const [isLoading, setIsLoading] = useState(true);
+//
+//     useEffect(() => {
+//         const storedUser = localStorage.getItem("sg_user");
+//         const storedSession = localStorage.getItem("sg_session");
+//
+//         if (storedUser) setUser(JSON.parse(storedUser));
+//         if (storedSession) setSession(JSON.parse(storedSession));
+//
+//         setIsLoading(false);
+//     }, []);
+//
+//     // ----------------------
+//     // LOGIN
+//     // ----------------------
+//     const login = async (email: string, password: string): Promise<void> => {
+//         setIsLoading(true);
+//
+//         try {
+//             const res = await api.post("/api/rest/auth/login", {
+//                 email,
+//                 password,
+//             });
+//
+//             const payload = res.data.content;
+//
+//             const backendUser = payload.user;
+//             const backendSession = payload.session;
+//
+//             setUser(backendUser);
+//             setSession(backendSession);
+//
+//             localStorage.setItem("sg_user", JSON.stringify(backendUser));
+//             localStorage.setItem("sg_session", JSON.stringify(backendSession));
+//         } catch (err: any) {
+//             const msg =
+//                 err?.response?.data?.error?.message ||
+//                 err?.response?.data?.message ||
+//                 "Login error";
+//
+//             throw new Error(msg);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+//
+//     // ----------------------
+//     // REGISTER
+//     // ----------------------
+//     const register = async (data: RegisterPayload): Promise<void> => {
+//         setIsLoading(true);
+//
+//         try {
+//             await api.post("/api/rest/auth/register", data);
+//         } catch (err: any) {
+//             const msg =
+//                 err?.response?.data?.error?.message ||
+//                 err?.response?.data?.message ||
+//                 "Registration error";
+//
+//             throw new Error(msg);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+//
+//     // ----------------------
+//     // LOGOUT
+//     // ----------------------
+//     const logout = () => {
+//         setUser(null);
+//         setSession(null);
+//         localStorage.removeItem("sg_user");
+//         localStorage.removeItem("sg_session");
+//     };
+//
+//     return (
+//         <AuthContext.Provider
+//             value={{
+//                 user,
+//                 isAuthenticated: !!session?.accessToken,
+//                 isLoading,
+//                 login,
+//                 register,
+//                 logout,
+//             }}
+//         >
+//             {children}
+//         </AuthContext.Provider>
+//     );
 // };
-
-// export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-//   const [user, setUser] = useState<User | null>(null);
-//   const [isLoading, setIsLoading] = useState(true);
-
-//   useEffect(() => {
-//     // Check for stored authentication
-//     const storedUser = localStorage.getItem('socialgenius_user');
-//     if (storedUser) {
-//       setUser(JSON.parse(storedUser));
-//     }
-//     setIsLoading(false);
-//   }, []);
-
-//   const login = async (email: string, password: string): Promise<void> => {
-//     setIsLoading(true);
-//     try {
-//       // Mock authentication - replace with actual API call
-//       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-//       if (email === 'demo@socialgenius.ge' && password === 'demo123') {
-//         setUser(mockUser);
-//         localStorage.setItem('socialgenius_user', JSON.stringify(mockUser));
-//       } else {
-//         throw new Error('Invalid credentials');
-//       }
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   const register = async (userData: Partial<User> & { email: string; password: string }): Promise<void> => {
-//     setIsLoading(true);
-//     try {
-//       // Mock registration - replace with actual API call
-//       await new Promise(resolve => setTimeout(resolve, 1500));
-      
-//       const newUser: User = {
-//         id: Date.now().toString(),
-//         email: userData.email,
-//         name: userData.name || 'New User',
-//         businessName: userData.businessName || 'My Business',
-//         businessType: userData.businessType || 'other',
-//         plan: 'starter'
-//       };
-      
-//       setUser(newUser);
-//       localStorage.setItem('socialgenius_user', JSON.stringify(newUser));
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   const logout = () => {
-//     setUser(null);
-//     localStorage.removeItem('socialgenius_user');
-//   };
-
-//   const value: AuthContextType = {
-//     user,
-//     isAuthenticated: !!user,
-//     isLoading,
-//     login,
-//     register,
-//     logout,
-//   };
-
-//   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-// };
-
+//
 // export const useAuth = () => {
-//   const context = useContext(AuthContext);
-//   if (context === undefined) {
-//     throw new Error('useAuth must be used within an AuthProvider');
-//   }
-//   return context;
+//     const ctx = useContext(AuthContext);
+//     if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
+//     return ctx;
 // };
 
+// perfectly working code
 
-// //code for adding backend
+import React, {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    ReactNode,
+} from "react";
+import api from "../lib/api";
 
+/* --------------------------
+   Types
+--------------------------- */
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../lib/api'; // axios instance
-import { ApiResponse, LoginContent, User as BackendUser } from '../types/Auth';
+export interface BackendUser {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    businessName: string;
+    businessId: number;
+    enabled: boolean;
+}
 
-// --------------------
-// Register payload DTO
-// --------------------
-interface RegisterPayload {
-  firstName: string;
-  lastName: string;
-  email: string;
-  businessName: string;
-  businessId: number;
-  password: string;
-  confirmPassword: string;
+export interface SessionData {
+    accessToken: string;
+    refreshToken: string;
+    expiresAt: number;
+}
+
+interface LoginResponse {
+    user: BackendUser;
+    session: SessionData;
 }
 
 interface AuthContextType {
-  user: BackendUser | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (data: RegisterPayload) => Promise<void>;
-  logout: () => void;
+    user: BackendUser | null;
+    session: SessionData | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+    login: (email: string, password: string) => Promise<void>;
+    register: (data: RegisterPayload) => Promise<void>;
+    activateAccount: (code: string) => Promise<void>;
+    refreshSession: () => Promise<void>;
+    logout: () => void;
 }
+
+interface RegisterPayload {
+    firstName: string;
+    lastName: string;
+    email: string;
+    businessName: string;
+    businessId: number;
+    password: string;
+    confirmPassword: string;
+}
+
+/* --------------------------
+   Context
+--------------------------- */
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// =======================================================================
-//                          Auth Provider
-// =======================================================================
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<BackendUser | null>(null);
-  const [session, setSession] = useState<any | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [user, setUser] = useState<BackendUser | null>(null);
+    const [session, setSession] = useState<SessionData | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-  // ------------------------
-  // Load saved auth on mount
-  // ------------------------
-  useEffect(() => {
-    const storedUser = localStorage.getItem('sg_user');
-    const storedSession = localStorage.getItem('sg_session');
+    /* --------------------------
+       Load saved session on mount
+    --------------------------- */
+    useEffect(() => {
+        const savedUser = localStorage.getItem("sg_user");
+        const savedSession = localStorage.getItem("sg_session");
 
-    if (storedUser) setUser(JSON.parse(storedUser));
-    if (storedSession) setSession(JSON.parse(storedSession));
+        if (savedUser) setUser(JSON.parse(savedUser) as BackendUser);
+        if (savedSession) setSession(JSON.parse(savedSession) as SessionData);
 
-    setIsLoading(false);
-  }, []);
+        setIsLoading(false);
+    }, []);
 
-  // =======================================================================
-  //                                LOGIN
-  // =======================================================================
-  const login = async (email: string, password: string): Promise<void> => {
-    setIsLoading(true);
-    try {
-      const res = await api.post<ApiResponse<LoginContent>>(
-        '/api/rest/auth/login',
-        { email, password },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+    /* --------------------------
+       LOGIN
+    --------------------------- */
+    const login = async (email: string, password: string) => {
+        setIsLoading(true);
+        try {
+            const res = await api.post<{ content: LoginResponse }>(
+                "/api/rest/auth/login",
+                { email, password }
+            );
 
-      const data = res.data.content;
+            const { user: backendUser, session: backendSession } = res.data.content;
 
-      // Save user and tokens
-      setUser(data.user);
-      setSession(data.session);
+            setUser(backendUser);
+            setSession(backendSession);
 
-      localStorage.setItem('sg_user', JSON.stringify(data.user));
-      localStorage.setItem('sg_session', JSON.stringify(data.session));
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.error?.message ||
-        err?.response?.data?.message ||
-        'Login failed';
+            localStorage.setItem("sg_user", JSON.stringify(backendUser));
+            localStorage.setItem("sg_session", JSON.stringify(backendSession));
+        } catch (error) {
+            const axiosErr = error as { response?: { data?: { error?: { message?: string } } } };
 
-      throw new Error(msg);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+            const msg =
+                axiosErr.response?.data?.error?.message ?? "Login failed";
 
-  // =======================================================================
-  //                              REGISTER
-  // =======================================================================
-  const register = async (data: RegisterPayload): Promise<void> => {
-    setIsLoading(true);
+            throw new Error(msg);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-    try {
-      // Backend returns ONLY a Descriptor (NO user, NO token)
-      await api.post(
-        '/api/rest/auth/register',
-        data,
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+    /* --------------------------
+       REGISTER
+    --------------------------- */
+    const register = async (data: RegisterPayload) => {
+        setIsLoading(true);
+        try {
+            await api.post("/api/rest/auth/register", data);
+        } catch (error) {
+            const axiosErr = error as { response?: { data?: { error?: { message?: string } } } };
+            const msg =
+                axiosErr.response?.data?.error?.message ??
+                "Registration failed";
+            throw new Error(msg);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-      // After successful register:
-      // → UI should navigate user to /login
-      // → Backend does NOT automatically log user in
+    /* --------------------------
+       ACTIVATE ACCOUNT
+    --------------------------- */
+    const activateAccount = async (code: string) => {
+        setIsLoading(true);
+        try {
+            await api.get(`/api/rest/auth/activate-account?activationCode=${code}`);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.error?.message ||
-        err?.response?.data?.message ||
-        'Registration failed';
+    /* --------------------------
+       REFRESH TOKEN
+    --------------------------- */
+    const refreshSession = async () => {
+        if (!session?.refreshToken) return;
 
-      throw new Error(msg);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        try {
+            const res = await api.post<{ content: SessionData }>(
+                "/api/rest/auth/refresh",
+                { refreshToken: session.refreshToken }
+            );
 
-  // =======================================================================
-  //                               LOGOUT
-  // =======================================================================
-  const logout = () => {
-    setUser(null);
-    setSession(null);
-    localStorage.removeItem('sg_user');
-    localStorage.removeItem('sg_session');
-  };
+            const updatedSession = res.data.content;
+            setSession(updatedSession);
+            localStorage.setItem("sg_session", JSON.stringify(updatedSession));
+        } catch {
+            logout();
+        }
+    };
 
-  // =======================================================================
-  //                              PROVIDER
-  // =======================================================================
-  const value: AuthContextType = {
-    user,
-    isAuthenticated: !!session?.accessToken,
-    isLoading,
-    login,
-    register,
-    logout,
-  };
+    /*
+       LOGOUT */
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    const logout = async () => {
+        try {
+            await api.post("/api/rest/user/logout");
+        } catch (e) {
+            console.warn("Logout endpoint failed, continuing local logout anyway");
+        }
+
+        setUser(null);
+        setSession(null);
+        localStorage.removeItem("sg_user");
+        localStorage.removeItem("sg_session");
+    };
+
+    return (
+        <AuthContext.Provider
+            value={{
+                user,
+                session,
+                isAuthenticated: !!session?.accessToken,
+                isLoading,
+                login,
+                register,
+                activateAccount,
+                refreshSession,
+                logout,
+            }}
+        >
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
-// =======================================================================
-//                              Custom Hook
-// =======================================================================
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+/* --------------------------
+   Custom Hook
+--------------------------- */
+export const useAuth = (): AuthContextType => {
+    const ctx = useContext(AuthContext);
+    if (!ctx) {
+        throw new Error("useAuth must be used inside AuthProvider");
+    }
+    return ctx;
 };

@@ -298,7 +298,17 @@ const LoginPage: React.FC = () => {
         </Button>
       </form>
 
-      <div className="text-center">
+        <div className="text-center">
+            <Link
+                to="/forgot-password"
+                className="text-primary-light hover:text-accent font-medium"
+            >
+                {language === 'ka' ? 'დაგავიწყდათ პაროლი?' : 'Forgot password?'}
+            </Link>
+        </div>
+
+
+        <div className="text-center">
         <p className="text-foreground-muted">
           {language === 'ka' ? 'არ გაქვთ ანგარიში?' : "Don't have an account?"}{' '}
           <Link to="/register" className="text-primary-light hover:text-accent font-medium">

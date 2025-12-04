@@ -1,335 +1,310 @@
-import React, { useState } from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { toast } from 'sonner';
-import { Facebook, Instagram, Twitter, Calendar, Send, Wand2, Image, Edit3 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+
+import React, { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+
+import {
+    Facebook,
+    Instagram,
+    Linkedin,
+    Calendar,
+    Send,
+    Wand2,
+    Image,
+    Edit3,
+} from "lucide-react";
+
+import { useNavigate } from "react-router-dom";
+import { generateContentApi, publishPostApi } from "@/lib/ai";
 
 const ContentGenerator: React.FC = () => {
-  const { language } = useLanguage();
-  const navigate = useNavigate();
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['facebook']);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('georgian');
-  const [contentType, setContentType] = useState<string>('text-image');
-  const [topic, setTopic] = useState('');
-  const [textStyle, setTextStyle] = useState<string>('friendly');
-  const [generatedContent, setGeneratedContent] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+    const { language } = useLanguage();
+    const navigate = useNavigate();
 
-  const platforms = [
-    { id: 'facebook', name: 'Facebook', icon: Facebook, color: 'text-blue-600' },
-    { id: 'instagram', name: 'Instagram', icon: Instagram, color: 'text-pink-600' },
-    { id: 'twitter', name: 'Twitter', icon: Twitter, color: 'text-blue-400' }
-  ];
 
-  const languages = [
-    { id: 'georgian', name: language === 'ka' ? 'ქართული' : 'Georgian' },
-    { id: 'english', name: language === 'ka' ? 'ინგლისური' : 'English' }
-  ];
+    const [selectedLanguage, setSelectedLanguage] = useState("georgian");
+    const [contentType, setContentType] = useState("text-image");
+    const [textStyle, setTextStyle] = useState("friendly");
+    const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["linkedin"]);
+    const [topic, setTopic] = useState("");
 
-  const contentTypes = [
-    { id: 'text-only', name: language === 'ka' ? 'მხოლოდ ტექსტი' : 'Text Only' },
-    { id: 'image-only', name: language === 'ka' ? 'მხოლოდ სურათი' : 'Image Only' },
-    { id: 'text-image', name: language === 'ka' ? 'ტექსტი + სურათი' : 'Text + Image' }
-  ];
+    const [generatedContent, setGeneratedContent] = useState("");
+    const [postId, setPostId] = useState<number | null>(null);
 
-  const textStyles = [
-    { id: 'friendly', name: language === 'ka' ? 'მეგობრული' : 'Friendly' },
-    { id: 'professional', name: language === 'ka' ? 'პროფესიონალური' : 'Professional' },
-    { id: 'everyday', name: language === 'ka' ? 'ყოველდღიური' : 'Everyday' },
-    { id: 'excited', name: language === 'ka' ? 'აღფრთოვანებული' : 'Excited' }
-  ];
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [isPublishing, setIsPublishing] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
-  const handlePlatformToggle = (platformId: string) => {
-    setSelectedPlatforms(prev => 
-      prev.includes(platformId) 
-        ? prev.filter(p => p !== platformId)
-        : [...prev, platformId]
-    );
-  };
 
-  const generateContent = async () => {
-    if (!topic.trim()) {
-      toast.error(language === 'ka' ? 'გთხოვთ შეიყვანოთ თემა' : 'Please enter a topic');
-      return;
-    }
+    const languageMap = { georgian: 1, english: 2 };
+    const contentTypeMap = { "text-only": 1, "image-only": 2, "text-image": 3 };
+    const textStyleMap = { friendly: 1, professional: 2, everyday: 3, excited: 4 };
+    const platformMap = { facebook: 1, instagram: 2, linkedin: 3 };
 
-    setIsGenerating(true);
-    try {
-      // Mock AI generation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const isGeorgian = selectedLanguage === 'georgian';
-      const stylePrefix = {
-        friendly: isGeorgian ? '😊' : '😊',
-        professional: isGeorgian ? '💼' : '💼',
-        everyday: isGeorgian ? '🌟' : '🌟',
-        excited: isGeorgian ? '🎉' : '🎉'
-      }[textStyle];
 
-      const mockContent = isGeorgian 
-        ? `${stylePrefix} ${topic} - ახალი შესაძლებლობა ჩვენი ბიზნესისთვის!\n\nჩვენ ვამაყოვართ რომ შეგვიძლია მოგაწოდოთ საუკეთესო სერვისი. დღეს განსაკუთრებით გვინდა გაგიზიაროთ ${topic} შესახებ.\n\n#ქართული #ბიზნესი #${topic.replace(/\s/g, '')}`
-        : `${stylePrefix} Exciting news about ${topic}!\n\nWe're proud to share something special with our community. Today we want to tell you more about ${topic} and how it can benefit you.\n\n#Business #Georgia #${topic.replace(/\s/g, '')}`;
-      
-      setGeneratedContent(mockContent);
-      toast.success(language === 'ka' ? 'კონტენტი წარმატებით შეიქმნა!' : 'Content generated successfully!');
-    } catch (error) {
-      toast.error(language === 'ka' ? 'შეცდომა გენერაციისას' : 'Error generating content');
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+    const togglePlatform = (p: string) => {
+        setSelectedPlatforms(prev =>
+            prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]
+        );
+    };
 
-  const publishNow = () => {
-    toast.success(language === 'ka' ? 'პოსტი გამოქვეყნდა!' : 'Post published!');
-  };
 
-  const schedulePost = () => {
-    navigate('/content/calendar', { state: { content: generatedContent, platforms: selectedPlatforms } });
-  };
+    const generateContent = async () => {
+        if (!topic.trim()) {
+            toast.error(language === "ka" ? "თემა შევსებული უნდა იყოს" : "Topic is required");
+            return;
+        }
 
-  return (
-    <div className="p-6 space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-jakarta font-bold text-foreground mb-2">
-          {language === 'ka' ? 'კონტენტის გენერატორი' : 'Content Generator'}
-        </h1>
-        <p className="text-foreground-muted">
-          {language === 'ka' ? 'შექმენით AI-ით საუკეთესო სოციალური მედია კონტენტი' : 'Create the best social media content with AI'}
-        </p>
-      </div>
+        setIsGenerating(true);
+        setPostId(null);
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Input Section */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Language Selection */}
-          <div className="card-gradient">
-            <h2 className="text-lg font-semibold text-foreground mb-4">
-              {language === 'ka' ? 'ენის არჩევა' : 'Language Selection'}
-            </h2>
-            <div className="grid grid-cols-2 gap-3">
-              {languages.map((lang) => (
-                <button
-                  key={lang.id}
-                  onClick={() => setSelectedLanguage(lang.id)}
-                  className={`p-3 rounded-lg border-2 transition-all duration-200 ${
-                    selectedLanguage === lang.id
-                      ? 'border-primary-light bg-primary-light/10' 
-                      : 'border-border hover:border-primary-light/50'
-                  }`}
-                >
-                  <span className="text-sm font-medium text-foreground">{lang.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+        try {
+            const payload = {
+                languageId: languageMap[selectedLanguage],
+                contentTypeId: contentTypeMap[contentType],
+                textStyleId: textStyleMap[textStyle],
+                socialNetworkPlatformIds: selectedPlatforms.map(p => platformMap[p]),
+                prompt: topic,
+            };
 
-          {/* Content Type Selection */}
-          <div className="card-gradient">
-            <h2 className="text-lg font-semibold text-foreground mb-4">
-              {language === 'ka' ? 'კონტენტის ტიპი' : 'Content Type'}
-            </h2>
-            <div className="grid grid-cols-3 gap-3">
-              {contentTypes.map((type) => (
-                <button
-                  key={type.id}
-                  onClick={() => setContentType(type.id)}
-                  className={`p-3 rounded-lg border-2 transition-all duration-200 ${
-                    contentType === type.id
-                      ? 'border-primary-light bg-primary-light/10' 
-                      : 'border-border hover:border-primary-light/50'
-                  }`}
-                >
-                  <span className="text-xs font-medium text-foreground">{type.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+            console.log("Payload:", payload);
 
-          {/* Platform Selection */}
-          <div className="card-gradient">
-            <h2 className="text-lg font-semibold text-foreground mb-4">
-              {language === 'ka' ? 'აირჩიეთ პლატფორმები' : 'Select Platforms'}
-            </h2>
-            <div className="grid grid-cols-3 gap-3">
-              {platforms.map((platform) => {
-                const Icon = platform.icon;
-                const isSelected = selectedPlatforms.includes(platform.id);
-                
-                return (
-                  <button
-                    key={platform.id}
-                    onClick={() => handlePlatformToggle(platform.id)}
-                    className={`p-3 rounded-lg border-2 transition-all duration-200 ${
-                      isSelected 
-                        ? 'border-primary-light bg-primary-light/10' 
-                        : 'border-border hover:border-primary-light/50'
-                    }`}
-                  >
-                    <div className="flex flex-col items-center space-y-2">
-                      <Icon className={`w-5 h-5 ${platform.color}`} />
-                      <span className="text-xs font-medium text-foreground">{platform.name}</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+            const response = await generateContentApi(payload);
+            console.log("Backend:", response);
 
-          {/* Topic Input */}
-          <div className="card-gradient">
-            <h2 className="text-lg font-semibold text-foreground mb-4">
-              {language === 'ka' ? 'თემა ან იდეა' : 'Topic or Idea'}
-            </h2>
-            <Textarea
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              placeholder={language === 'ka' 
-                ? 'მაგ: ახალი მენიუ, სეზონური ფასდაკლება, ღონისძიება...'
-                : 'e.g: New menu, seasonal discount, event...'
-              }
-              className="input-elegant resize-none"
-              rows={4}
-            />
-          </div>
+            setGeneratedContent(response?.content?.text || "");
+            setPostId(response?.content?.postId || null);
 
-          {/* Text Style Selection */}
-          <div className="card-gradient">
-            <h2 className="text-lg font-semibold text-foreground mb-4">
-              {language === 'ka' ? 'ტექსტის სტილი' : 'Text Style'}
-            </h2>
-            <div className="grid grid-cols-2 gap-3">
-              {textStyles.map((style) => (
-                <button
-                  key={style.id}
-                  onClick={() => setTextStyle(style.id)}
-                  className={`p-3 rounded-lg border-2 transition-all duration-200 ${
-                    textStyle === style.id
-                      ? 'border-primary-light bg-primary-light/10' 
-                      : 'border-border hover:border-primary-light/50'
-                  }`}
-                >
-                  <span className="text-sm font-medium text-foreground">{style.name}</span>
-                </button>
-              ))}
-            </div>
-            
-            <Button 
-              onClick={generateContent}
-              disabled={isGenerating}
-              className="btn-hero mt-4 w-full"
-            >
-              {isGenerating ? (
-                <>
-                  <Wand2 className="w-4 h-4 mr-2 animate-spin" />
-                  {language === 'ka' ? 'იქმნება...' : 'Generating...'}
-                </>
-              ) : (
-                <>
-                  <Wand2 className="w-4 h-4 mr-2" />
-                  {language === 'ka' ? 'კონტენტის გენერაცია' : 'Generate Content'}
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
+            toast.success(language === "ka" ? "კონტენტი შეიქმნა!" : "Content generated!");
+        } catch (err) {
+            console.error(err);
+            toast.error("Generation failed.");
+        } finally {
+            setIsGenerating(false);
+        }
+    };
 
-        {/* Right Column - Preview Section */}
-        <div className="lg:col-span-1">
-          {generatedContent ? (
-            <div className="card-gradient sticky top-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-foreground">
-                  {language === 'ka' ? 'შექმნილი კონტენტი' : 'Generated Content'}
+
+    const publishNow = async () => {
+        if (!postId) return toast.error("No post to publish");
+
+        setIsPublishing(true);
+        try {
+            await publishPostApi(postId);
+            toast.success(language === "ka" ? "გამოქვეყნდა!" : "Published!");
+        } catch (err) {
+            console.error(err);
+            toast.error("Publish failed");
+        } finally {
+            setIsPublishing(false);
+        }
+    };
+
+
+    const schedulePost = () => {
+        if (!postId) return toast.error("Generate content first");
+
+        navigate("/content/calendar", {
+            state: {
+                postId,
+                content: generatedContent,
+                platforms: selectedPlatforms,
+            },
+        });
+    };
+
+
+    return (
+        <div className="p-6 space-y-6">
+
+            {/* PAGE TITLE */}
+            <h1 className="text-3xl font-bold text-foreground">
+                {language === "ka" ? "კონტენტის გენერატორი" : "Content Generator"}
+            </h1>
+
+            {/* LANGUAGE SELECTION */}
+            <div className="card-gradient p-4">
+                <h2 className="text-lg font-semibold mb-4">
+                    {language === "ka" ? "ენა" : "Language"}
                 </h2>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsEditing(!isEditing)}
-                  className="text-primary-light hover:text-primary"
-                >
-                  <Edit3 className="w-4 h-4 mr-2" />
-                  {language === 'ka' ? 'რედაქტირება' : 'Edit'}
-                </Button>
-              </div>
 
-              {/* Generated Image Preview */}
-              <div className="mb-4 p-3 bg-background-light rounded-lg border border-border">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Image className="w-4 h-4 text-primary-light" />
-                  <span className="text-xs font-medium text-foreground">
-                    {language === 'ka' ? 'ავტომატურად გენერირებული სურათი' : 'Auto-generated Image'}
-                  </span>
+                <div className="grid grid-cols-2 gap-3">
+                    <button
+                        onClick={() => setSelectedLanguage("georgian")}
+                        className={`p-3 border rounded-lg ${
+                            selectedLanguage === "georgian"
+                                ? "border-primary-light bg-primary-light/10"
+                                : "border-border"
+                        }`}
+                    >
+                        Georgian
+                    </button>
+
+                    <button
+                        onClick={() => setSelectedLanguage("english")}
+                        className={`p-3 border rounded-lg ${
+                            selectedLanguage === "english"
+                                ? "border-primary-light bg-primary-light/10"
+                                : "border-border"
+                        }`}
+                    >
+                        English
+                    </button>
                 </div>
-                {(contentType === 'image-only' || contentType === 'text-image') && (
-                  <div className="w-full h-32 bg-gradient-primary rounded-lg flex items-center justify-center">
-                    <span className="text-white text-xs font-medium text-center px-2">
-                      {language === 'ka' ? 'AI სურათი თემაზე: ' : 'AI Image for: '}{topic}
-                    </span>
-                  </div>
-                 )}
-              </div>
+            </div>
 
-              <div className="space-y-4">
-                {isEditing ? (
-                  <Textarea
-                    value={generatedContent}
-                    onChange={(e) => setGeneratedContent(e.target.value)}
-                    className="input-elegant resize-none"
-                    rows={6}
-                  />
+
+            <div className="card-gradient p-4">
+                <h2 className="text-lg font-semibold mb-4">
+                    {language === "ka" ? "პლატფორმა" : "Platforms"}
+                </h2>
+
+                <div className="grid grid-cols-3 gap-3">
+
+                    <button
+                        onClick={() => togglePlatform("linkedin")}
+                        className={`p-3 border rounded-lg flex flex-col items-center ${
+                            selectedPlatforms.includes("linkedin")
+                                ? "border-primary-light bg-primary-light/10"
+                                : "border-border"
+                        }`}
+                    >
+                        <Linkedin className="w-5 h-5 text-blue-700" />
+                        LinkedIn
+                    </button>
+
+                    <button
+                        onClick={() => togglePlatform("facebook")}
+                        className={`p-3 border rounded-lg flex flex-col items-center ${
+                            selectedPlatforms.includes("facebook")
+                                ? "border-primary-light bg-primary-light/10"
+                                : "border-border"
+                        }`}
+                    >
+                        <Facebook className="w-5 h-5 text-blue-600" />
+                        Facebook
+                    </button>
+
+                    <button
+                        onClick={() => togglePlatform("instagram")}
+                        className={`p-3 border rounded-lg flex flex-col items-center ${
+                            selectedPlatforms.includes("instagram")
+                                ? "border-primary-light bg-primary-light/10"
+                                : "border-border"
+                        }`}
+                    >
+                        <Instagram className="w-5 h-5 text-pink-600" />
+                        Instagram
+                    </button>
+
+                </div>
+            </div>
+
+
+            <div className="card-gradient p-4">
+                <h2 className="text-lg font-semibold mb-4">
+                    {language === "ka" ? "კონტენტის ტიპი" : "Content Type"}
+                </h2>
+
+                <div className="grid grid-cols-3 gap-3">
+                    {["text-only", "image-only", "text-image"].map(ct => (
+                        <button
+                            key={ct}
+                            onClick={() => setContentType(ct)}
+                            className={`p-3 border rounded-lg ${
+                                contentType === ct
+                                    ? "border-primary-light bg-primary-light/10"
+                                    : "border-border"
+                            }`}
+                        >
+                            {ct}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+
+            <div className="card-gradient p-4">
+                <h2 className="text-lg font-semibold mb-4">Topic</h2>
+                <Textarea
+                    value={topic}
+                    onChange={(e) => setTopic(e.target.value)}
+                    rows={3}
+                    placeholder="Write your topic..."
+                />
+            </div>
+
+
+            <div className="grid grid-cols-2 gap-3">
+                {["friendly", "professional", "everyday", "excited"].map(style => (
+                    <button
+                        key={style}
+                        onClick={() => setTextStyle(style)}
+                        className={`p-3 border rounded-lg ${
+                            textStyle === style
+                                ? "border-primary-light bg-primary-light/10"
+                                : "border-border"
+                        }`}
+                    >
+                        {style}
+                    </button>
+                ))}
+            </div>
+
+
+            <Button className="btn-hero w-full" onClick={generateContent} disabled={isGenerating}>
+                {isGenerating ? (
+                    <>
+                        <Wand2 className="w-4 h-4 mr-2 animate-spin" />
+                        Generating...
+                    </>
                 ) : (
-                  <div className="p-3 bg-background-light rounded-lg border border-border">
-                    <pre className="whitespace-pre-wrap text-sm text-foreground font-sans">
-                      {generatedContent}
-                    </pre>
-                  </div>
+                    <>
+                        <Wand2 className="w-4 h-4 mr-2" />
+                        Generate
+                    </>
                 )}
+            </Button>
 
-                <div className="grid grid-cols-1 gap-3">
-                  <Button 
-                    onClick={publishNow}
-                    className="btn-hero"
-                  >
-                    <Send className="w-4 h-4 mr-2" />
-                    {language === 'ka' ? 'გამოქვეყნება ახლავე' : 'Post Now'}
-                  </Button>
-                  
-                  <Button 
-                    onClick={schedulePost}
-                    variant="outline"
-                    className="btn-outline-hero"
-                  >
-                    <Calendar className="w-4 h-4 mr-2" />
-                    {language === 'ka' ? 'დაგეგმვა' : 'Schedule'}
-                  </Button>
+
+            {!generatedContent ? (
+                <div className="card-gradient p-12 text-center">No Content Yet</div>
+            ) : (
+                <div className="card-gradient p-4">
+
+                    <h2 className="text-lg font-semibold mb-4">Generated Content</h2>
+
+                    <pre className="bg-background-light border p-3 rounded-lg whitespace-pre-wrap text-sm">
+                        {generatedContent}
+                    </pre>
+
+                    <div className="grid grid-cols-1 gap-3 mt-4">
+                        <Button
+                            className="btn-hero"
+                            onClick={publishNow}
+                            disabled={!postId || isPublishing}
+                        >
+                            <Send className="w-4 h-4 mr-2" />
+                            {isPublishing ? "Publishing..." : "Publish Now"}
+                        </Button>
+
+                        <Button
+                            variant="outline"
+                            className="btn-outline-hero"
+                            onClick={schedulePost}
+                            disabled={!postId}
+                        >
+                            <Calendar className="w-4 h-4 mr-2" />
+                            Schedule
+                        </Button>
+                    </div>
+
                 </div>
-              </div>
-            </div>
-          ) : (
-            <div className="card-gradient h-fit">
-              <div className="text-center py-12">
-                <Wand2 className="w-12 h-12 text-foreground-subtle mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-foreground mb-2">
-                  {language === 'ka' ? 'კონტენტი არ არის შექმნილი' : 'No Content Generated'}
-                </h3>
-                <p className="text-foreground-muted text-sm">
-                  {language === 'ka' 
-                    ? 'შეიყვანეთ თემა და დააჭირეთ გენერაციის ღილაკს' 
-                    : 'Enter a topic and click generate to create content'
-                  }
-                </p>
-              </div>
-            </div>
-          )}
+            )}
         </div>
-      </div>
-
-    </div>
-  );
+    );
 };
 
 export default ContentGenerator;

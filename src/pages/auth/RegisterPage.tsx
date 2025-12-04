@@ -341,8 +341,10 @@ const RegisterPage: React.FC = () => {
 
     try {
       await register(formData);
-      toast.success(language === "ka" ? "წარმატებით დარეგისტრირდით!" : "Successfully registered!");
-      navigate("/dashboard");
+      // toast.success(language === "ka" ? "წარმატებით დარეგისტრირდით!" : "Successfully registered!");
+      // navigate("/dashboard");
+        toast.success("Registered! Check your email for activation code.");
+        navigate("/activate-account");
     } catch (err: any) {
       toast.error(language === "ka" ? "რეგისტრაციის შეცდომა" : "Registration failed");
     }

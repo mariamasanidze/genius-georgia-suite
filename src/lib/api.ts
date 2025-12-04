@@ -1,49 +1,80 @@
-import axios, { AxiosHeaders } from "axios";
 
-// Create axios instance
+
+import axios from "axios";
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+    baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
-// Request interceptor
+
 api.interceptors.request.use((config) => {
-  // PUBLIC endpoints (no Authorization header)
-  const isAuthEndpoint =
-    config.url?.includes("/auth/login") ||
-    config.url?.includes("/auth/register") ||
-    config.url?.includes("/auth/activate-account") ||
-    config.url?.includes("/auth/refresh") ||
-    config.url?.includes("/auth/forgot-password") ||
-    config.url?.includes("/auth/reset-password");
+    const publicAuthRoutes = [
+        "/auth/login",
+        "/auth/register",
+        "/auth/activate-account",
+        "/auth/forgot-password",
+        "/auth/reset-password",
+        "/auth/refresh",
+    ];
 
-  if (isAuthEndpoint) {
-    return config;
-  }
+    const isPublic = publicAuthRoutes.some((r) =>
+        config.url?.includes(r)
+    );
 
-  // PRIVATE endpoints → Add token
-  const session = localStorage.getItem("sg_session");
+    if (!isPublic) {
+        const session = localStorage.getItem("sg_session");
 
-  if (session) {
-    const parsed = JSON.parse(session);
-    const token = parsed?.accessToken;
-
-    if (token) {
-      if (!config.headers) {
-        config.headers = new AxiosHeaders();
-      }
-
-      // If Axios v1 uses .set(), use it
-      if ((config.headers as any).set) {
-        (config.headers as any).set("Authorization", `Bearer ${token}`);
-      } 
-      // Fallback for older Axios
-      else {
-        (config.headers as any)["Authorization"] = `Bearer ${token}`;
-      }
+        if (session) {
+            const token = JSON.parse(session)?.accessToken;
+            if (token) config.headers["Authorization"] = `Bearer ${token}`;
+        }
     }
-  }
 
-  return config;
+    return config;
 });
+
+
+api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
+
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            const session = localStorage.getItem("sg_session");
+            if (!session) return Promise.reject(error);
+
+            try {
+                const { refreshToken } = JSON.parse(session);
+
+
+                const res = await axios.post(
+                    `${import.meta.env.VITE_API_BASE_URL}/api/rest/auth/refresh`,
+                    { refreshToken }
+                );
+
+                const newSession = res.data.content.session;
+
+
+                localStorage.setItem("sg_session", JSON.stringify(newSession));
+
+
+                originalRequest.headers["Authorization"] =
+                    `Bearer ${newSession.accessToken}`;
+
+                return api(originalRequest);
+            } catch {
+
+                localStorage.removeItem("sg_user");
+                localStorage.removeItem("sg_session");
+                window.location.href = "/login";
+            }
+        }
+
+        return Promise.reject(error);
+    }
+);
 
 export default api;
