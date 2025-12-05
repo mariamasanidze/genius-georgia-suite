@@ -36,6 +36,8 @@ import CommunityPage from "@/pages/dashboard/CommunityPage";
 import SettingsPage from "@/pages/dashboard/SettingsPage";
 import BillingPage from "@/pages/dashboard/BillingPage";
 import ChangePasswordPage from "@/pages/dashboard/ChangePasswordPage.tsx";
+import PostsPage from "@/pages/dashboard/PostsPage";
+import PostDetailsPage from "@/pages/dashboard/PostDetailsPage";
 
 
 // Other
@@ -164,6 +166,26 @@ const App = () => (
                                     <ProtectedRoute>
                                         <DashboardLayout>
                                             <ContentCalendar />
+                                        </DashboardLayout>
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/posts"
+                                element={
+                                    <ProtectedRoute>
+                                        <DashboardLayout>
+                                            <PostsPage />
+                                        </DashboardLayout>
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/dashboard/posts/:id"
+                                element={
+                                    <ProtectedRoute>
+                                        <DashboardLayout>
+                                            <PostDetailsPage />
                                         </DashboardLayout>
                                     </ProtectedRoute>
                                 }

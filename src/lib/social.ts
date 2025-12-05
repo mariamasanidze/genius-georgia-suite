@@ -10,7 +10,6 @@ export const getLinkedInAuthUrl = async (): Promise<string> => {
 
         console.log("Full LinkedIn URL response:", res.data);
 
-        // Backend returns { success, message, content: "url" }
         const url =
             res.data?.content?.url ||
             res.data?.content ||
@@ -45,7 +44,6 @@ export const getSocialAccounts = async () => {
     try {
         const res = await api.get("/api/rest/social/accounts");
 
-        // Backend returns: { success, message, content: [ { platformId, ... } ] }
         return Array.isArray(res.data?.content)
             ? res.data.content
             : [];

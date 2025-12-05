@@ -60,7 +60,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       href: '/settings',
       icon: Settings,
     },
-    {
+      {
+          name: t('dashboard.posts'),
+          href: '/posts',
+          icon: PenTool, // or any other icon you prefer
+      },
+
+      {
       name: t('dashboard.billing'),
       href: '/billing',
       icon: CreditCard,
