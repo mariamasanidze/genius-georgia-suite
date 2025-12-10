@@ -19,6 +19,8 @@ import PricingPage from "@/pages/PricingPage";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import LinkedInCallbackPage from "@/pages/dashboard/LinkedInCallbackPage";
+import FacebookCallbackPage from "@/pages/dashboard/FacebookCallbackPage.tsx";
+import InstagramCallbackPage from "@/pages/dashboard/InstagramCallbackPage.tsx";
 
 // Auth Pages
 import LoginPage from "@/pages/auth/LoginPage";
@@ -148,6 +150,8 @@ const App = () => (
                                 }
                             />
                             <Route path="/linkedin/callback" element={<LinkedInCallbackPage />} />
+                            <Route path="/facebook/callback" element={<FacebookCallbackPage />} />
+                            <Route path="/instagram/callback" element={<InstagramCallbackPage />} />
 
                             <Route
                                 path="/content/generator"
