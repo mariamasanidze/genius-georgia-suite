@@ -8,6 +8,10 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 5173,
+      allowedHosts: [
+          'unscriptural-julissa-premeditative.ngrok-free.dev',
+          'scutelliform-schemeless-margrett.ngrok-free.dev'
+      ]
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
