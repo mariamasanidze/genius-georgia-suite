@@ -16,7 +16,7 @@ const ConnectLinkedInButton: React.FC = () => {
                 return;
             }
 
-            window.location.href = url; // redirect to LinkedIn login
+            window.location.href = url;
         } catch (err) {
             console.error("LinkedIn connection error:", err);
             toast.error("Could not start LinkedIn linking");

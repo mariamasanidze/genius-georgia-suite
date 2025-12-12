@@ -20,7 +20,7 @@ const FacebookCallbackPage = () => {
                 console.log("Code:", code);
                 console.log("Error:", error);
 
-                // If there's an error from Facebook
+
                 if (error) {
                     console.error("Facebook OAuth error:", error, errorDescription);
                     toast.error(errorDescription || "Failed to connect Facebook account");
@@ -29,7 +29,7 @@ const FacebookCallbackPage = () => {
                     return;
                 }
 
-                // If there's no code, we shouldn't be on this page
+
                 if (!code) {
                     console.error("No authorization code in URL");
                     toast.error("Invalid callback - no authorization code");
@@ -38,7 +38,7 @@ const FacebookCallbackPage = () => {
                     return;
                 }
 
-                // We have a code, proceed with linking
+
                 console.log("Linking Facebook account with code:", code);
 
                 const response = await api.post("/api/rest/social/link", {

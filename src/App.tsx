@@ -58,7 +58,7 @@ const App = () => (
                     <BrowserRouter>
                         <Routes>
 
-                            {/* Public Marketing Routes */}
+
                             <Route
                                 path="/"
                                 element={
@@ -113,7 +113,7 @@ const App = () => (
                                 }
                             />
 
-                            {/* Authentication Routes */}
+
                             <Route
                                 path="/login"
                                 element={
@@ -138,7 +138,7 @@ const App = () => (
                                 element={<AuthLayout><ActivateAccountPage /></AuthLayout>}
                             />
 
-                            {/* Protected Dashboard Routes */}
+
                             <Route
                                 path="/dashboard"
                                 element={
@@ -249,7 +249,7 @@ const App = () => (
                                 }
                             />
 
-                            {/* Catch-all 404 Route */}
+
                             <Route path="*" element={<NotFound />} />
 
                         </Routes>
